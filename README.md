@@ -1,159 +1,113 @@
-# Turborepo starter
+# MegaIoT Platform
 
-This Turborepo starter is maintained by the Turborepo core team.
+MegaIoT is a high-performance, multi-tenant Internet of Things (IoT) platform built for scale. It handles device provisioning, real-time telemetry ingestion, streaming analytics, rules-based automation, and fleet OTA management.
 
-## Using this example
+## System Architecture
 
-Run the following command:
+The platform uses a microservices architecture to separate concerns and scale horizontally.
 
-```sh
-npx create-turbo@latest
+```mermaid
+graph TD
+    subgraph Edge
+        D[IoT Devices]
+    end
+
+    subgraph "Ingest Layer"
+        IA[Ingest API (FastAPI)]
+        MB[NATS JetStream]
+    end
+
+    subgraph "Processing Layer"
+        W_D[Decoder Worker]
+        W_W[DB Writer Worker]
+        W_R[Rules Engine]
+        W_O[OTA Manager]
+        W_A[Action Dispatcher]
+    end
+
+    subgraph "Storage Layer"
+        DB[(PostgreSQL / TimescaleDB)]
+        REDIS[(Redis State Cache)]
+    end
+
+    subgraph "Application Layer"
+        CA[Core API (FastAPI)]
+        RT[Real-time SSE (Node.js)]
+        WEB[Web Dashboard (Next.js)]
+    end
+
+    D -- "Telemetry (MQTT/HTTP)" --> IA
+    IA -- "telemetry.raw.v1" --> MB
+    
+    MB -- "Consume" --> W_D
+    W_D -- "telemetry.datapoint.v1" --> MB
+    
+    MB -- "Consume" --> W_W
+    W_W -- "Write" --> DB
+    
+    MB -- "Consume" --> W_R
+    W_R -- "Check State" --> REDIS
+    W_R -- "action.webhook.v1" --> MB
+    
+    MB -- "Consume" --> W_A
+    W_A -- "Trigger" --> Webhooks[External Webhooks]
+    
+    MB -- "Consume" --> RT
+    RT -- "Server-Sent Events" --> WEB
+    
+    WEB -- "REST (CRUD)" --> CA
+    CA -- "Manage" --> DB
 ```
 
-## What's inside?
+## Core Components
 
-This Turborepo includes the following packages/apps:
+1. **Core API (`services/api`)**: FastAPI application managing Organizations, Projects, Devices, Dashboards, and Rules.
+2. **Ingest Service (`services/ingest`)**: High-throughput FastAPI service strictly for receiving device telemetry and publishing to NATS.
+3. **Background Worker (`services/worker`)**: Python service running asynchronous NATS consumers (Decoding, DB Writing, Rule Evaluation, OTA).
+4. **Real-time Service (`services/realtime`)**: Node.js service providing Server-Sent Events (SSE) to stream live data to the UI.
+5. **Web Dashboard (`apps/web`)**: Next.js React application with a premium glassmorphic UI, featuring a drag-and-drop dashboard builder.
 
-### Apps and Packages
+## Prerequisites & Setup
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+You will need the following infrastructure:
+1. **PostgreSQL** (with TimescaleDB extension)
+2. **Redis**
+3. **NATS JetStream**
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+### Quick Start (Local Development)
 
-### Utilities
+1. **Install Dependencies**:
+    The project uses NPM for the frontend monorepo and standard Python environments for the backend.
+    ```bash
+    npm install
+    ```
 
-This Turborepo has some additional tools already setup for you:
+2. **Configure Environment Variables**:
+    Ensure the `.env` file at the root contains the required connection strings:
+    ```env
+    POSTGRES_DSN=postgresql+asyncpg://user:pass@host:5432/dbname
+    REDIS_URL=redis://host:6379/0
+    NATS_URL=nats://localhost:4222
+    JWT_SECRET=your_super_secret_key
+    ```
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+3. **Start the Infrastructure** (if using local Docker):
+    ```bash
+    docker run -d --name nats-main -p 4222:4222 -p 8222:8222 nats -js
+    ```
 
-### Build
+4. **Run the Application**:
+    You can run each service individually or use a script. See `scripts/start-dev.ps1` (if available) to boot the entire stack at once.
 
-To build all apps and packages, run the following command:
+    To run the web interface:
+    ```bash
+    npm run dev --workspace=web
+    ```
 
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
+## Simulating Data
 
-```sh
-cd my-turborepo
-turbo build
+Once the platform is running, you can use the simulation script to test the ingestion pipeline:
+```bash
+python scripts/simulate_device.py
 ```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo build
-npm dlx turbo build
-npm exec turbo build
-```
-
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo build --filter=docs
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo build --filter=docs
-npm exec turbo build --filter=docs
-npm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo dev
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo dev
-npm exec turbo dev
-npm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo dev --filter=web
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo dev --filter=web
-npm exec turbo dev --filter=web
-npm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended):
-
-```sh
-cd my-turborepo
-turbo login
-```
-
-Without global `turbo`, use your package manager:
-
-```sh
-cd my-turborepo
-npx turbo login
-npm exec turbo login
-npm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed:
-
-```sh
-turbo link
-```
-
-Without global `turbo`:
-
-```sh
-npx turbo link
-npm exec turbo link
-npm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+This script will authenticate via the HTTP ingest endpoint and send randomized temperature and humidity data.

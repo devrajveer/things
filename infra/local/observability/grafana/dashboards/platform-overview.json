@@ -1,0 +1,16 @@
+{
+  "title": "Platform Overview",
+  "tags": ["megaiot", "overview"],
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "panels": [
+    {
+      "type": "text",
+      "title": "Welcome",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 0 },
+      "options": {
+        "content": "# MegaIoT Platform\nThis dashboard will show you the ingestion rates, active devices, and API health once the traffic begins flowing."
+      }
+    }
+  ]
+}

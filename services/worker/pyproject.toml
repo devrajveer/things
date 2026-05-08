@@ -1,0 +1,17 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "yp-worker"
+version = "0.1.0"
+description = "MegaIoT Worker Service"
+requires-python = ">=3.12"
+dependencies = [
+    "yp-shared>=0.1.0",
+    "fastapi>=0.100",
+    "uvicorn[standard]",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/yp_worker"]

@@ -1,0 +1,28 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "yp-shared"
+version = "0.1.0"
+description = "Shared Python utilities for MegaIoT"
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0",
+    "structlog>=24.0",
+    "ulid-py>=1.1",
+    "opentelemetry-api",
+    "opentelemetry-sdk",
+    "opentelemetry-instrumentation-fastapi",
+    "nats-py>=2.7",
+    "sqlalchemy>=2.0",
+    "asyncpg>=0.29",
+    "redis>=5.0",
+    "fastapi>=0.100",
+    "pytest",
+    "pytest-asyncio"
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

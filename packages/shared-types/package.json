@@ -1,0 +1,11 @@
+{
+  "name": "@yourplatform/shared-types",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "generate": "./scripts/generate.sh"
+  },
+  "devDependencies": {
+    "json-schema-to-typescript": "^13.1.2"
+  }
+}

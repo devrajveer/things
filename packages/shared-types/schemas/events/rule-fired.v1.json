@@ -1,0 +1,23 @@
+{
+  "$id": "https://yourplatform.com/schemas/events/rule-fired.v1.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RuleFiredEventV1",
+  "type": "object",
+  "required": ["schema", "event_id", "occurred_at", "project_id", "rule_id"],
+  "properties": {
+    "schema": { "type": "string", "const": "rules.fired.v1" },
+    "event_id": { "type": "string" },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "project_id": { "type": "string" },
+    "rule_id": { "type": "string" },
+    "data": {
+      "type": "object",
+      "description": "Evaluated rule results and threshold values",
+      "additionalProperties": true
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

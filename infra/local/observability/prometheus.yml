@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'megaiot-services'
+    static_configs:
+      - targets: 
+        - 'host.docker.internal:8000' # API
+        - 'host.docker.internal:8001' # Ingest
+        - 'host.docker.internal:8002' # Worker
+        - 'host.docker.internal:8003' # AI Worker
+        - 'host.docker.internal:8004' # Scheduler
+        - 'host.docker.internal:3001' # Realtime

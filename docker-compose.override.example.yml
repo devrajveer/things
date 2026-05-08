@@ -1,0 +1,5 @@
+version: '3.8'
+
+services:
+  # Add local development overrides here
+  # Example: Expose additional ports or map specific local directories

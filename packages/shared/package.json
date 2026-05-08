@@ -1,0 +1,13 @@
+{
+  "name": "@yourplatform/shared",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "ulid": "^2.3.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}

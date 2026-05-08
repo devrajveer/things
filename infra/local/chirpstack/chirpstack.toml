@@ -1,0 +1,12 @@
+[postgresql]
+dsn="postgres://yp:yp@postgres:5432/yourplatform?sslmode=disable"
+
+[redis]
+url="redis://:devpassword@redis:6379"
+
+[network]
+net_id="000000"
+
+[api]
+bind="0.0.0.0:8080"
+secret="you-must-replace-this-with-a-random-secret"

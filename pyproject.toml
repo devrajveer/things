@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "mega-iot-platform"
+version = "0.1.0"
+description = "AI-native IoT platform"
+authors = ["Your Name <you@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+  "E",    # pycodestyle
+  "F",    # pyflakes
+  "W",    # warnings
+  "I",    # isort
+  "N",    # pep8-naming
+  "B",    # bugbear
+  "UP",   # pyupgrade
+  "ASYNC",# async-specific
+  "S",    # bandit (security)
+  "C4",   # comprehensions
+  "DTZ",  # datetimez (no naive datetimes)
+  "T20",  # no print()
+  "RET",  # return statements
+  "SIM",  # simplifications
+  "ARG",  # unused args
+  "PTH",  # prefer pathlib over os.path
+  "ERA",  # no commented-out code
+  "PL",   # pylint subset
+  "TRY",  # try/except patterns
+]
+ignore = ["E501"]  # line length handled by formatter
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101", "ARG", "PLR2004"]  # asserts ok in tests
+
+[tool.mypy]
+strict = true
+plugins = ["pydantic.mypy"]
+disallow_untyped_decorators = true
+disallow_any_generics = true
+warn_unreachable = true
+

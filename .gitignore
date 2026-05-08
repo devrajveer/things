@@ -36,3 +36,34 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+ENV/
+env/
+
+# Executables
+*.exe
+*.dll
+*.so
+*.dylib
+nats-server.exe
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Docker Data/Volumes
+.docker-data/
+postgres-data/
+redis-data/
+nats-data/

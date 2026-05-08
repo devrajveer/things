@@ -1,0 +1,12 @@
+---
+title: Architecture
+description: How MegaIoT is built under the hood.
+---
+
+## Components
+
+The system consists of:
+- **API Service**: FastAPI
+- **Worker & AI Worker**: Dramatiq and LangGraph
+- **Ingest**: High throughput event ingestion
+- **Realtime**: Node.js WebSocket fan-out

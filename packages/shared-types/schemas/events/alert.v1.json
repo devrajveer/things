@@ -1,0 +1,25 @@
+{
+  "$id": "https://yourplatform.com/schemas/events/alert.v1.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AlertEventV1",
+  "type": "object",
+  "required": ["schema", "event_id", "occurred_at", "project_id", "rule_id", "alert_id", "state"],
+  "properties": {
+    "schema": { "type": "string", "const": "alerts.state_changed.v1" },
+    "event_id": { "type": "string" },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "project_id": { "type": "string" },
+    "rule_id": { "type": "string" },
+    "alert_id": { "type": "string" },
+    "state": { "type": "string", "enum": ["fired", "resolved"] },
+    "data": {
+      "type": "object",
+      "description": "Trigger context, offending datapoint etc.",
+      "additionalProperties": true
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

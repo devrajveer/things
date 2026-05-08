@@ -1,28 +1,34 @@
 {
   "name": "web",
   "version": "0.1.0",
-  "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3000",
+    "dev": "next dev --port 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --max-warnings 0",
-    "check-types": "next typegen && tsc --noEmit"
+    "lint": "next lint"
   },
   "dependencies": {
-    "@repo/ui": "*",
-    "next": "16.2.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^3.23.0",
+    "@yourplatform/shared": "*",
+    "lucide-react": "^0.368.0",
+    "clsx": "^2.1.0",
+    "tailwind-merge": "^2.2.2",
+    "framer-motion": "^11.0.0",
+    "react-grid-layout": "^1.4.4",
+    "recharts": "^2.12.0"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
-    "@types/node": "^22.15.3",
-    "@types/react": "19.2.2",
-    "@types/react-dom": "19.2.2",
-    "eslint": "^9.39.1",
-    "typescript": "5.9.2"
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^9.0.0",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "typescript": "5.6.3"
   }
 }
