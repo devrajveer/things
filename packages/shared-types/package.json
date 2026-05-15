@@ -6,6 +6,6 @@
     "generate": "./scripts/generate.sh"
   },
   "devDependencies": {
-    "json-schema-to-typescript": "^13.1.2"
+    "json-schema-to-typescript": "^15.0.4"
   }
 }
