@@ -1,5 +1,5 @@
 [postgresql]
-dsn="postgres://yp:yp@postgres:5432/yourplatform?sslmode=disable"
+dsn="postgres://yp:yp@postgres:5432/chirpstack?sslmode=disable"
 
 [redis]
 url="redis://:devpassword@redis:6379"
